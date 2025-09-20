@@ -106,7 +106,7 @@ async def stats(interaction: discord.Interaction):
         inline=False
     )
     embed.set_thumbnail(url=interaction.user.display_avatar.url)
-    embed.set_footer(text="Keep up the good work!")
+    embed.set_footer(text="Thank you for your donations ❤️")
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
