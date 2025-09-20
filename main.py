@@ -167,7 +167,7 @@ async def removestats(interaction: discord.Interaction, user: discord.User, amou
     try:
         parsed_amount = parse_amount(amount)
     except ValueError:
-        await interaction.response.send_message("❌ Invalid amount format. Use numbers or suffixes like k, m, b (e.g., 10k, 5m, 1b).", ephemeral=True)
+        await interaction.response.send_message("❌ Invalid amount format. Use numbers or suffixes like k, m, b (e.g., 5m, 1b).", ephemeral=True)
         return
     
     if parsed_amount <= 0:
