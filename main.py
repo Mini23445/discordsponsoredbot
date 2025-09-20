@@ -91,6 +91,16 @@ async def stats(interaction: discord.Interaction):
     gems = user_stats["gems_given"]
     formatted_gems = format_number(gems)
     
+    embed = discord.Embed(
+        title="💎 Gem Donation Stats",
+        description=f"**{interaction.user.name}**'s donation history",
+        color=0x00ff00
+    )
+    embed.add_field(
+        name="Total Gems Given",
+        value=f"```{formatted_gems} 💎```",
+        inline=False
+    )
     embed.set_thumbnail(url=interaction.user.display_avatar.url)
     embed.set_footer(text="Keep up the good work!")
     
@@ -157,7 +167,7 @@ async def removestats(interaction: discord.Interaction, user: discord.User, amou
     try:
         parsed_amount = parse_amount(amount)
     except ValueError:
-        await interaction.response.send_message("❌ Invalid amount format. Use numbers or suffixes like k, m, b (e.g., 5m, 1b).", ephemeral=True)
+        await interaction.response.send_message("❌ Invalid amount format. Use numbers or suffixes like k, m, b (e.g., 10k, 5m, 1b).", ephemeral=True)
         return
     
     if parsed_amount <= 0:
