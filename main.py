@@ -102,7 +102,7 @@ async def stats(interaction: discord.Interaction):
         inline=False
     )
     embed.set_thumbnail(url=interaction.user.display_avatar.url)
-    embed.set_footer(text="Keep up the good work!")
+    embed.set_footer(text="Create a ticket in this channel: https://discord.com/channels/1410677275761971271/1410686614572892210 to increase your sponsored amount!")
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
