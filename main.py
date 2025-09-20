@@ -255,7 +255,7 @@ async def leaderboard(interaction: discord.Interaction):
         user = await bot.fetch_user(int(user_id_str))
         formatted_gems = format_number(data["gems_given"])
         position = ["🥇", "🥈", "🥉", "💥", "🔥"][i]  # Emoji for top 5 positions
-        leaderboard_message += f"{position} {user.mention} – {formatted_gems} 💎\n"
+        leaderboard_message += f"{position} {user.mention} – {formatted_gems} 💎\n\n"  # Added gap after each entry
 
     # Send the leaderboard as an ephemeral message
     embed = discord.Embed(
