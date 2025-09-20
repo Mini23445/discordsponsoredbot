@@ -79,8 +79,12 @@ def parse_amount(amount_str):
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
     try:
-        synced = await bot.tree.sync()
+        synced = await bot.tree.sync()  # Ensure all commands are synced
         print(f"Synced {len(synced)} command(s)")
+        # Print the list of registered commands
+        commands = bot.tree.get_commands()
+        for command in commands:
+            print(command.name)  # This will print out each command's name
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
@@ -232,6 +236,34 @@ async def adminstats(interaction: discord.Interaction, user: discord.User):
     embed.set_thumbnail(url=user.display_avatar.url)
     embed.set_footer(text=f"Requested by {interaction.user.name}")
     
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+# Leaderboard command - shows top gem donors
+@bot.tree.command(name="leaderboard", description="View the leaderboard of gem donors")
+async def leaderboard(interaction: discord.Interaction):
+    stats = load_stats()  # Load all stats from the JSON file
+
+    # Sort the users by their "gems_given" in descending order
+    sorted_stats = sorted(stats.items(), key=lambda item: item[1]["gems_given"], reverse=True)
+
+    # Prepare the leaderboard display
+    leaderboard_message = "Thank you **so much** for your donations! ❤️\n"
+    leaderboard_message += "We use these gems for **giveaways, events, and much more!** 🔥\n\n"
+
+    # Add the top 5 users to the leaderboard
+    for i, (user_id_str, data) in enumerate(sorted_stats[:5]):
+        user = await bot.fetch_user(int(user_id_str))
+        formatted_gems = format_number(data["gems_given"])
+        position = ["🥇", "🥈", "🥉", "💥", "🔥"][i]  # Emoji for top 5 positions
+        leaderboard_message += f"{position} {user.mention} – {formatted_gems} 💎\n"
+
+    # Send the leaderboard as an ephemeral message
+    embed = discord.Embed(
+        title="🏆 Gem Donation Leaderboard",
+        description=leaderboard_message,
+        color=0x00ff00
+    )
+
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # Run the bot
