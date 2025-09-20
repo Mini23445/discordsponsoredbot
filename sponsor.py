@@ -3,11 +3,8 @@ from discord.ext import commands
 from discord import app_commands
 import json
 import os
+import re
 from typing import Optional
-
-# Load environment variables from .env file (for local development, optional for Railway)
-from dotenv import load_dotenv
-load_dotenv()
 
 # Bot setup
 intents = discord.Intents.default()
@@ -17,7 +14,7 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 # File to store user stats
 STATS_FILE = "gem_stats.json"
 
-# Get values from environment variables
+# Configuration - UPDATE THESE VALUES
 ADMIN_ROLE_ID = int(os.getenv("ADMIN_ROLE_ID"))  # Admin role ID from env variable
 LOG_CHANNEL_ID = int(os.getenv("LOG_CHANNEL_ID"))  # Log channel ID from env variable
 
@@ -61,11 +58,14 @@ def format_number(number):
 
 # Parse amount input (supports numbers, k, m, b suffixes)
 def parse_amount(amount_str):
+    # If it's already a number, return it
     if isinstance(amount_str, int):
         return amount_str
     
+    # Remove any commas
     amount_str = str(amount_str).replace(',', '')
     
+    # Check for suffix
     if amount_str.lower().endswith('k'):
         return int(float(amount_str[:-1]) * 1000)
     elif amount_str.lower().endswith('m'):
@@ -128,6 +128,7 @@ async def log(interaction: discord.Interaction, user: discord.User, amount: str)
     formatted_amount = format_number(parsed_amount)
     formatted_total = format_number(new_total)
     
+    # Send confirmation to admin
     embed = discord.Embed(
         title="✅ Gems Logged Successfully",
         color=0x00ff00
@@ -139,6 +140,7 @@ async def log(interaction: discord.Interaction, user: discord.User, amount: str)
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
     
+    # Send to log channel
     log_channel = bot.get_channel(LOG_CHANNEL_ID)
     if log_channel:
         log_embed = discord.Embed(
@@ -192,6 +194,7 @@ async def removestats(interaction: discord.Interaction, user: discord.User, amou
     
     await interaction.response.send_message(embed=embed, ephemeral=True)
     
+    # Send to log channel
     log_channel = bot.get_channel(LOG_CHANNEL_ID)
     if log_channel:
         log_embed = discord.Embed(
