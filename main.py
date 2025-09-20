@@ -91,20 +91,23 @@ async def stats(interaction: discord.Interaction):
     gems = user_stats["gems_given"]
     formatted_gems = format_number(gems)
     
-    embed = discord.Embed(
-        title="💎 Gem Donation Stats",
-        description=f"**{interaction.user.name}**'s donation history",
-        color=0x00ff00
-    )
-    embed.add_field(
-        name="Total Gems Given",
-        value=f"```{formatted_gems} 💎```",
-        inline=False
-    )
-    embed.set_thumbnail(url=interaction.user.display_avatar.url)
-    embed.set_footer(text="Create a ticket in this channel: https://discord.com/channels/1410677275761971271/1410686614572892210 to increase your sponsored amount!")
-    
-    await interaction.response.send_message(embed=embed, ephemeral=True)
+channel_id = 1410686614572892210  # Your channel ID
+channel_mention = f"<#{channel_id}>"
+
+embed = discord.Embed(
+    title="💎 Gem Donation Stats",
+    description=f"**{interaction.user.name}**'s donation history",
+    color=0x00ff00
+)
+embed.add_field(
+    name="Total Gems Given",
+    value=f"```{formatted_gems} 💎```",
+    inline=False
+)
+embed.set_thumbnail(url=interaction.user.display_avatar.url)
+embed.set_footer(text=f"Create a ticket in {channel_mention} to increase your sponsored amount!")
+
+await interaction.response.send_message(embed=embed, ephemeral=True)
 
 # Log command - admin only
 @bot.tree.command(name="log", description="Log gems given to a user (Admin only)")
